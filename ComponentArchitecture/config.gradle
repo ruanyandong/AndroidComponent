@@ -1,0 +1,26 @@
+ext {
+
+    android = [
+            compileSdkVersion: 30,
+            buildToolsVersion: "29.0.3",
+            minSdkVersion    : 14,
+            targetSdkVersion : 30,
+            versionCode      : 1,
+            versionName      : "1.0",
+            isApplication    : false
+    ]
+
+    dependencies = [
+            //宿主
+            publicImplementation: [
+                    'androidx.appcompat:appcompat:1.2.0',
+                    'androidx.constraintlayout:constraintlayout:2.0.0'
+            ],
+            other               : [
+                    ':basic',
+                    ':common',
+                    ':router'
+            ],
+
+    ]
+}

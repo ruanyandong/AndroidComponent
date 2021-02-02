@@ -1,0 +1,63 @@
+if (rootProject.ext.android.isApplication){
+    apply plugin: 'com.android.application'
+}else {
+    apply plugin: 'com.android.library'
+}
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    defaultConfig {
+        if (rootProject.ext.android.isApplication){
+            applicationId "com.wings.login"
+        }
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main{
+            // 独立运行与集成调试的时候，使用不同的manifest文件
+            if (rootProject.ext.android.isApplication){
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                // 当是app独立运行的时候，把module目录的文件也加入到java源文件的编译路径
+                java.srcDir 'src/main/module'
+            }else {
+                manifest.srcFile 'src/main/manifest/AndroidManifest.xml'
+            }
+
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    // 这样写也可以，多个依赖用,隔开
+    // 1、方法一
+    // implementation 'androidx.appcompat:appcompat:1.2.0','androidx.constraintlayout:constraintlayout:2.0.0'
+
+    // 2、方法二
+    //implementation 'androidx.appcompat:appcompat:1.2.0'
+    //implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
+
+    // 3、方法三
+    rootProject.ext.dependencies.publicImplementation.each{
+        implementation it
+    }
+    rootProject.ext.dependencies.other.each {
+        implementation project(it)
+    }
+
+    implementation project(path: ':annotation')
+    annotationProcessor project(path: ':annotation_compiler')
+}

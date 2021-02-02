@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.wings.componentarchitecture"
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(path: ':annotation')
+    annotationProcessor project(path: ':annotation_compiler')
+    // 这样写也可以，多个依赖用,隔开
+    // 1、方法一
+    // implementation 'androidx.appcompat:appcompat:1.2.0','androidx.constraintlayout:constraintlayout:2.0.0'
+
+    // 2、方法二
+    //implementation 'androidx.appcompat:appcompat:1.2.0'
+    //implementation 'androidx.constraintlayout:constraintlayout:2.0.0'
+
+    // 3、方法三
+    rootProject.ext.dependencies.publicImplementation.each{
+        implementation it
+    }
+
+    // implementation project(path: ':basic')
+    rootProject.ext.dependencies.other.each {
+        implementation project(it)
+    }
+
+    if (!rootProject.ext.android.isApplication){
+        implementation project(path:':member')
+        implementation project(path:':login')
+    }
+}
