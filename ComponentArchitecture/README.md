@@ -6,3 +6,5 @@
         APT = 注解 +  注解处理器======》实现组件间路由跳转
         LiveData实现组件间消息传递
        
+
+Android组件化框架，编译时注解处理器实现类似ARouter跳转，LiveData实现消息通信 
